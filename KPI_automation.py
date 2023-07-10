@@ -71,7 +71,7 @@ df['Participantes'] = df['Participantes'].str.lower()
 df = df[df['Created'].dt.year == int(ano)]
 
 # Os dados recebidos são, por padrão, criados com aspas e cada nome é separado por ;
-# ex: "fulano.silva;beltrano.nunes;ciclano;borges"
+# ex: "fulano.silva;beltrano.nunes;ciclano.borges"
 df['Participantes'] = df['Participantes'].map(str).str.replace('"','').str.split(';')
 df['Participantes'] = df['Participantes'].apply(lambda x: [p.strip() for p in x if p.strip()])
 df = df.dropna(subset=['Participantes'])
