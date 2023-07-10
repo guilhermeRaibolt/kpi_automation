@@ -69,12 +69,20 @@ else:
 df.rename(columns={'Custom field (Participantes)': 'Participantes'}, inplace=True)
 df['Participantes'] = df['Participantes'].str.lower()
 df = df[df['Created'].dt.year == int(ano)]
+
+# Os dados recebidos são, por padrão, criados com aspas e cada nome é separado por ;
+# ex: "fulano.silva;beltrano.nunes;ciclano;borges"
 df['Participantes'] = df['Participantes'].map(str).str.replace('"','').str.split(';')
 df['Participantes'] = df['Participantes'].apply(lambda x: [p.strip() for p in x if p.strip()])
 df = df.dropna(subset=['Participantes'])
 df = df.explode('Participantes')
 df['Participantes'] = df['Participantes'].astype(str)
+
+# Alguns testes são realizados e, por padrão, vêm com participante 'teste'
 df = df[~df['Participantes'].str.contains('teste')]
+
+# unidecode foi utilizado para transformar ç em c e  remover acentos, o que 
+# se tornou necessário por não haver um padrão nos nomes registrados
 df['Participantes'] = df['Participantes'].apply(unidecode)
 df = df.reset_index(drop=True)
  
